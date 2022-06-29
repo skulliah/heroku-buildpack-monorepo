@@ -23,8 +23,6 @@ if [[ ! -f "${APP_BASE}/${CLEAN_FILES}" ]]; then
   exit 1
 fi
 
-echo "File: ${APP_BASE}/${CLEAN_FILES}"
-
 function remove_file_or_dir {
   if [[ -f "$1" ]]; then
     echo "Removing file $1 from slug"
@@ -52,9 +50,3 @@ while IFS= read -r file; do
     echo "Location ${file} not found - ignoring"
   fi
 done <"${APP_BASE}/${CLEAN_FILES}"
-
-echo "Files left"
-
-ls -d *
-
-exit 1
