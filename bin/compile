@@ -1,6 +1,5 @@
 BUILD_DIR=$1
 CLEAN_FILES=.slug-clean-files
-PRUNE_SCRIPT=https://gobinaries.com/tj/node-prune
 
 if [[ ! -n "${BUILD_DIR}" ]]; then
   echo "No build directory specified - exiting"
