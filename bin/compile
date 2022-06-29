@@ -1,0 +1,51 @@
+BUILD_DIR=$1
+CLEAN_FILES=.slug-clean-files
+PRUNE_SCRIPT=https://gobinaries.com/tj/node-prune
+
+if [[ ! -n "${BUILD_DIR}" ]]; then
+  echo "No build directory specified - exiting"
+  exit 1
+fi
+
+if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
+    echo "APP_BASE was not set. Aborting" | indent
+    exit 1
+fi
+APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
+
+# Enable globstar patterns
+shopt -s globstar
+cd ${BUILD_DIR}
+
+if [[ ! -f "${APP_BASE}/${CLEAN_FILES}" ]]; then
+  echo "Could not find .slug-clean-files file - exiting"
+  exit 1
+fi
+
+function remove_file_or_dir {
+  if [[ -f "$1" ]]; then
+    echo "Removing file $1 from slug"
+    rm -f $1
+  elif [[ -d "$1" ]]; then
+    echo "Removing directory $1 from slug"
+    rm -rf $1
+  else
+    echo "Location $1 not found - ignoring"
+  fi
+}
+
+export -f remove_file_or_dir
+
+while IFS= read -r file; do
+  [[ ! -n "${file}" ]] && continue
+
+  if [[ -f "${file}" || -d "${file}" ]]; then
+    # Target is a file or directory, remove it
+    remove_file_or_dir ${file}
+  elif ls -d $(echo $file) &> /dev/null; then
+    # target is a glob, expand it and remove everything it matches
+    ls -d1 $(echo $file) | while read line; do remove_file_or_dir $line; done
+  else
+    echo "Location ${file} not found - ignoring"
+  fi
+done <${CLEAN_FILES}
