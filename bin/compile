@@ -1,4 +1,6 @@
 BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
 CLEAN_FILES=.slug-clean-files
 
 if [[ ! -n "${BUILD_DIR}" ]]; then
