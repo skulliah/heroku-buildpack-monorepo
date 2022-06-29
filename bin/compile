@@ -53,4 +53,8 @@ while IFS= read -r file; do
   fi
 done <"${APP_BASE}/${CLEAN_FILES}"
 
+echo "Files left"
+
+ls -d *
+
 exit 1
