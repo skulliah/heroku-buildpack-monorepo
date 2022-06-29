@@ -19,7 +19,7 @@ shopt -s globstar
 cd ${BUILD_DIR}
 
 if [[ ! -f "${APP_BASE}/${CLEAN_FILES}" ]]; then
-  echo "Could not find .slug-clean-files file - exiting"
+  echo "Could not find ${APP_BASE}/${CLEAN_FILES} file - exiting"
   exit 1
 fi
 
@@ -49,4 +49,4 @@ while IFS= read -r file; do
   else
     echo "Location ${file} not found - ignoring"
   fi
-done <${CLEAN_FILES}
+done <"${APP_BASE}/${CLEAN_FILES}"
